@@ -21,7 +21,9 @@
 
 # DVD payload
 part / --size=6144
- 
+
+network --device=enp0s3 --onboot=yes --bootproto=dhcp
+
 # cinnamon configuration
 %post #<-- adding
 # create /etc/sysconfig/desktop (needed for installation)
@@ -38,23 +40,27 @@ cat >> /etc/rc.d/init.d/livesys << EOF
 
 %end #<- adding...
 
-%post  --nochroot  
+%post --nochroot
 
-dnf install --installroot=/mnt/sysimage  gdm wget lynx remmina* clementine -y;
-dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-dnf update --refresh -y
+dnf install --installroot=/mnt/sysimage gdm wget lynx -y;
+#dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+#dnf update --refresh -y
 
 
 #my own config
 # cinnamon themes :D
-hash wget 2>/dev/null || { echo >&2 "No se encontro wget :("; exit 1;} #detecting wget; a ver si no se detiene todo...
+#hash wget 2>/dev/null || { echo >&2 "No se encontro wget :("; exit 1;} #detecting wget; a ver si no se detiene todo...
 mkdir /tmp/theme/
 cd /tmp/theme/
-wget http://paranoids.us/spins/fedora/themes/DarkLight.zip
-unzip DarkLight.zip
-cp -r /usr/share/cinnamon/theme/ /usr/share/cinnamon/theme_backup/
-cp -r /tmp/theme/ /usr/share/cinnamon/theme/
-rm -rf /tmp/theme
+curl http://cinnamon-spices.linuxmint.com/uploads/themes/WHVC-1OMQ-6474.zip -o "Dark-Line.zip"
+chown liveuser:liveuser Dark-Line.zip
+chmod +r Dark-Line.zip
+unzip Dark-Line.zip
+#cp -r /usr/share/cinnamon/theme/ /home/liveuser/.theme/
+cp -r /tmp/theme/Dark-Line /usr/share/themes/
+gsettings set org.cinnamon.desktop.interface gtk-theme Dark-Line
+gsettings set org.cinnamon.theme name Dark-Line
+#rm -rf /tmp/theme
 #end testing
  
 # set up gdm autologin

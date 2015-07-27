@@ -18,11 +18,11 @@ pidgin
 hexchat
 transmission
 parole
-wget 
+wget
 lynx
 gdm
-remmina*
-clementine
+#remmina*
+#clementine
 # unlock default keyring. FIXME: Should probably be done in comps
 gnome-keyring-pam
 
