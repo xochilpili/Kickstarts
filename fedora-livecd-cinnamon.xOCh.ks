@@ -51,11 +51,11 @@ cat >> /etc/rc.d/init.d/livesys << EOF
 #hash wget 2>/dev/null || { echo >&2 "No se encontro wget :("; exit 1;} #detecting wget; a ver si no se detiene todo...
 echo "The beggining of my own config"
 mkdir /tmp/theme/
-cd /tmp/theme/
-/usr/bin/curl http://cinnamon-spices.linuxmint.com/uploads/themes/WHVC-1OMQ-6474.zip -o Dark-Line.zip
-chown liveuser:liveuser Dark-Line.zip
-chmod +r Dark-Line.zip
-unzip Dark-Line.zip
+#cd /tmp/theme/
+/usr/bin/curl http://cinnamon-spices.linuxmint.com/uploads/themes/WHVC-1OMQ-6474.zip -o /tmp/theme/Dark-Line.zip
+chown liveuser:liveuser /tmp/theme/Dark-Line.zip
+chmod +r /tmp/theme/Dark-Line.zip
+unzip /tmp/theme/Dark-Line.zip
 #cp -r /usr/share/cinnamon/theme/ /home/liveuser/.theme/
 cp -r /tmp/theme/Dark-Line /usr/share/themes/
 gsettings set org.cinnamon.desktop.interface gtk-theme Dark-Line
