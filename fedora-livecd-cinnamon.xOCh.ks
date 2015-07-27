@@ -41,7 +41,7 @@ cat >> /etc/rc.d/init.d/livesys << EOF
 #<- adding...
 
 
-dnf install --installroot=/mnt/sysimage gdm wget lynx -y;
+#dnf install --installroot=/mnt/sysimage gdm wget lynx -y;
 #dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 #dnf update --refresh -y
 
@@ -52,7 +52,7 @@ dnf install --installroot=/mnt/sysimage gdm wget lynx -y;
 echo "The beggining of my own config"
 mkdir /tmp/theme/
 cd /tmp/theme/
-/usr/bin/curl http://cinnamon-spices.linuxmint.com/uploads/themes/WHVC-1OMQ-6474.zip -o "Dark-Line.zip"
+/usr/bin/curl http://cinnamon-spices.linuxmint.com/uploads/themes/WHVC-1OMQ-6474.zip -o Dark-Line.zip
 chown liveuser:liveuser Dark-Line.zip
 chmod +r Dark-Line.zip
 unzip Dark-Line.zip
