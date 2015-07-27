@@ -14,10 +14,10 @@
 %include /usr/share/spin-kickstarts/fedora-cinnamon-packages.xOCh.ks
 
 # im goint to take this lines to fedora-cinnamon-packages.xOCh.ks
-#%packages
-#wget
-#lynx
-#gdm
+%packages
+wget
+lynx
+gdm
 
 # DVD payload
 part / --size=6144

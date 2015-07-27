@@ -18,9 +18,6 @@ pidgin
 hexchat
 transmission
 parole
-wget
-lynx
-gdm
 #remmina*
 #clementine
 # unlock default keyring. FIXME: Should probably be done in comps
