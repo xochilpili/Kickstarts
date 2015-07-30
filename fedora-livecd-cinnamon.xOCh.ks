@@ -71,6 +71,8 @@ echo "Chowning liveuser folder..."
 chown -R liveuser:liveuser /home/liveuser
 restorecon -R /home/liveuser
 
+EOF # end of /etc/rc.local/init.d/livesys
+
 echo "Applying gsettings..."
 
 #setting theme
@@ -85,7 +87,6 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 echo "This works?"
 
-EOF
 
 %end
 
