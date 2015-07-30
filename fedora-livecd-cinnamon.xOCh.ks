@@ -79,9 +79,9 @@ cat > /usr/share/glib-2.0/schemas/cinnamon-live.gschema.override <<EOF
 gtk-theme='Dark-Line'
 [org.cinnamon.theme]
 name='Dark-Line'
-[org.cinnamon.desktop.background]
-picture-uri='file:///usr/share/backgrounds/images/black_pirate_flag.jpg'
 EOF
+#saving glib database
+glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 echo "This works?"
 
