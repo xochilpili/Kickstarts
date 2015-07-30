@@ -8,6 +8,10 @@
 # Editor(s): 
 # Corey84; xochilpili 
 #
+services --enabled=NetworkManager --disabled=sshd
+network --device=enp0s3 --onboot=yes --bootproto=dhcp
+
+repo --name=PAranoids --baseurl=http://fedora.paranoids.us/rpmbuild/ 
 
 %include /usr/share/spin-kickstarts/fedora-live-base.ks
 %include /usr/share/spin-kickstarts/fedora-live-minimization.ks
@@ -18,14 +22,15 @@
 wget
 lynx
 gdm
-
+backgrounds.noarch
+cinnamon-spin-themes.noarch
+%end #<- thrown an error missing;
 # DVD payload
 part / --size=6144
 
-network --device=enp0s3 --onboot=yes --bootproto=dhcp
-
 # cinnamon configuration
 %post --log=/root/kickstart-post.log #<-- adding
+echo "Starting Kickstart shit..."
 # create /etc/sysconfig/desktop (needed for installation)
 cat > /etc/sysconfig/desktop <<EOF
 PREFERRED=/usr/bin/cinnamon-session
@@ -38,39 +43,42 @@ desktop-file-edit --set-key=NoDisplay --set-value=true /usr/share/applications/y
  
 cat >> /etc/rc.d/init.d/livesys << EOF
 
-#<- adding...
+cat >/etc/yum.repos.d/PAranoids.repo <<EOF
+[PAranoids]
+name=PAranoids $releasever - $basearch
+baseurl=http://fedora.paranoids.us/rpmbuild/
+enabled=1
+EOF
 
 
 #dnf install --installroot=/mnt/sysimage gdm wget lynx -y;
 #dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 #dnf update --refresh -y
 
+# set up gdm autologin
+#-> not working sed -i 's/^#autologin-user=.*/autologin-user=liveuser/' /etc/gdm/gdm.conf
+#-> not working sed -i 's/^#autologin-user-timeout=.*/autologin-user-timeout=0/' /etc/gdm/gdm.conf
 
-#my own config
-# cinnamon themes :D
-#hash wget 2>/dev/null || { echo >&2 "No se encontro wget :("; exit 1;} #detecting wget; a ver si no se detiene todo...
-echo "The beggining of my own config"
-mkdir /tmp/theme/
-#cd /tmp/theme/
-/usr/bin/curl http://cinnamon-spices.linuxmint.com/uploads/themes/WHVC-1OMQ-6474.zip -o /tmp/theme/Dark-Line.zip
-chown liveuser:liveuser /tmp/theme/Dark-Line.zip
-chmod +r /tmp/theme/Dark-Line.zip
-unzip /tmp/theme/Dark-Line.zip
-#cp -r /usr/share/cinnamon/theme/ /home/liveuser/.theme/
-cp -r /tmp/theme/Dark-Line /usr/share/themes/
+echo "Aqui esta el error?"
+gsettings set org.gnome.desktop.session session-name cinnamon
 gsettings set org.cinnamon.desktop.interface gtk-theme Dark-Line
 gsettings set org.cinnamon.theme name Dark-Line
-#rm -rf /tmp/theme
-#end testing
- 
-# set up gdm autologin
-sed -i 's/^#autologin-user=.*/autologin-user=liveuser/' /etc/gdm/gdm.conf
-sed -i 's/^#autologin-user-timeout=.*/autologin-user-timeout=0/' /etc/gdm/gdm.conf
+
+
+cat >/etc/gdm/custom.conf <<EOF
+[daemon]
+#activar el registro automatico
+AutomaticLogin=liveuser
+AutomaticLoginEnable=true
+# set Cinnamon as default session, otherwise login will fail
+DefaultSession=cinnamon.desktop
+EOF
+
 systemctl enable gdm
 
  
 # set Cinnamon as default session, otherwise login will fail
-sed -i 's/^#user-session=.*/user-session=cinnamon/' /etc/gdm/gdm.conf
+#-> not working sed -i 's/^#user-session=.*/user-session=cinnamon/' /etc/gdm/gdm.conf
  
 # Show harddisk install on the desktop
 sed -i -e 's/NoDisplay=true/NoDisplay=false/' /usr/share/applications/liveinst.desktop
@@ -82,9 +90,8 @@ chmod +x /home/liveuser/Desktop/liveinst.desktop
  
 # this goes at the end after all other changes.
 chown -R liveuser:liveuser /home/liveuser
-restorecon -R /home/liveuser
- 
-EOF
- 
+#<> i messed up selinux :> restorecon -R /home/liveuser
+
+
 %end
 
